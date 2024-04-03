@@ -212,8 +212,7 @@
   /*  Home  */
   .home {
     display: flex;
-    background: url("https://source.unsplash.com/720x600/?dark,laptop") no-repeat
-      center;
+    background: url("https://wallpaperaccess.com/full/5652030.jpg")center;
     height: 100vh;
     color: #fff;
     min-height: 500px;
@@ -517,6 +516,7 @@
     text-align: center;
     overflow: hidden;
     transition: all 0.3s ease;
+    height: 600px;
   }
   
   .projects .carousel .card:hover {
