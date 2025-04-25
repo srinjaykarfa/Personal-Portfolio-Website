@@ -1,90 +1,130 @@
-$(document).ready(function () {
-    $(window).scroll(function () {
-      //  sticky navbar on scroll script  //
-      if (this.scrollY > 20) {
-        $(".navbar").addClass("sticky");
-      } else {
-        $(".navbar").removeClass("sticky");
-      }
-  
-      //  scroll-up button show/hide script  //
-      if (this.scrollY > 500) {
-        $(".scroll-up-btn").addClass("show");
-      } else {
-        $(".scroll-up-btn").removeClass("show");
-      }
+// Wait for DOM to be fully loaded
+$(document).ready(() => {
+    const navbar = $(".navbar");
+    const scrollBtn = $(".scroll-up-btn");
+    const menu = $(".navbar .menu");
+    const menuBtn = $(".menu-btn i");
+    
+    // Throttle scroll event for better performance
+    let lastScrollTime = 0;
+    const scrollThreshold = 100; // ms between scroll events
+    
+    $(window).scroll(() => {
+        const currentTime = new Date().getTime();
+        if (currentTime - lastScrollTime < scrollThreshold) return;
+        lastScrollTime = currentTime;
+
+        const scrollY = window.scrollY;
+        
+        // Toggle navbar sticky class
+        navbar.toggleClass("sticky", scrollY > 20);
+        
+        // Toggle scroll button visibility
+        scrollBtn.toggleClass("show", scrollY > 500);
     });
-  
-    //  slide-up script  //
-  
-    $(".scroll-up-btn").click(function () {
-      $("html").animate({ scrollTop: 0 });
-      //  removing smooth scroll on slide-up button click  //
-      $("html").css("scrollBehavior", "auto");
+
+    // Smooth scroll to top
+    scrollBtn.click(() => {
+        $("html, body").animate(
+            { scrollTop: 0 },
+            {
+                duration: 0,
+                easing: 'easeInOutQuart'
+            }
+        );
+        return false;
     });
-  
-    $(".navbar .menu li a").click(function () {
-      //  Smooth scroll on Menu Items click  //
-  
-      $("html").css("scrollBehavior", "smooth");
+
+    // Smooth scroll for menu items
+    $(".navbar .menu li a").click(function() {
+        $("html").css("scrollBehavior", "smooth");
     });
-  
-    //  Toggle Navbar  //
-  
-    $(".menu-btn").click(function () {
-      $(".navbar .menu").toggleClass("active");
-      $(".menu-btn i").toggleClass("active");
+
+    // Toggle mobile menu
+    $(".menu-btn").click(() => {
+        menu.toggleClass("active");
+        menuBtn.toggleClass("active");
     });
-  
-    //  Typing Text Animation  //
-  
-    var typed = new Typed(".typing", {
-      strings: [
-        "Fullstack Developer",
-        "Web Developer",
-        "C programmer",
-        "Founder",
-        "Author"
-      ],
-      typeSpeed: 100,
-      backSpeed: 60,
-      loop: true
+
+    // Initialize typing animations
+    const commonTypingConfig = {
+        typeSpeed: 100,
+        backSpeed: 60,
+        loop: true
+    };
+
+    new Typed(".typing", {
+        ...commonTypingConfig,
+        strings: [
+            "Web Developer",
+            "Designer",
+            "Problem Solver",
+            "Full Stack Developer"
+        ]
     });
-  
-    var typed = new Typed(".typing-2", {
-      strings: [
-        "Fullstack Developer",
-        "Web Developer",
-        "C programmer",
-        "Founder",
-        "Author"
-      ],
-      typeSpeed: 100,
-      backSpeed: 60,
-      loop: true
+
+    new Typed(".typing-2", {
+        ...commonTypingConfig,
+        strings: [
+            "Fullstack Developer",
+            "Web Developer",
+            "C programmer",
+            "Founder",
+            "Author"
+        ]
     });
-  
-    //  Owl Carousel  //
-  
+
+    // Initialize carousel with optimized settings
     $(".carousel").owlCarousel({
-      margin: 20,
-      loop: true,
-      autoplay: true,
-      autoplayTimeOut: 2000,
-      autoplayHoverPause: true,
-      responsive: {
-        0: {
-          items: 1,
-          nav: false
-        },
-        600: {
-          items: 2,
-          nav: false
-        },
-        1000: {
-          items: 3,
-          nav: false
+        margin: 20,
+        loop: true,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplayHoverPause: true,
+        lazyLoad: true,
+        responsive: {
+            0: { items: 1 },
+            600: { items: 2 },
+            1000: { items: 3 }
         }
-      }
     });
+});
+
+// Scroll Animation
+const scrollElements = document.querySelectorAll('.scroll-animate');
+
+const elementInView = (el, percentageScroll = 100) => {
+  const elementTop = el.getBoundingClientRect().top;
+  return (
+    elementTop <= 
+    ((window.innerHeight || document.documentElement.clientHeight) * (percentageScroll/100))
+  );
+};
+
+const displayScrollElement = (element) => {
+  element.classList.add('active');
+};
+
+const hideScrollElement = (element) => {
+  element.classList.remove('active');
+};
+
+const handleScrollAnimation = () => {
+  scrollElements.forEach((el) => {
+    if (elementInView(el, 100)) {
+      displayScrollElement(el);
+    } else {
+      hideScrollElement(el);
+    }
   });
+};
+
+// Add scroll event listener
+window.addEventListener('scroll', () => {
+  handleScrollAnimation();
+});
+
+// Initial check for elements in view
+window.addEventListener('load', () => {
+  handleScrollAnimation();
+});
